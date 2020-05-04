@@ -1,0 +1,21 @@
+<div *ngIf="movie$ | async; let movie" class=" ui fluid container grid">
+  <div class="row">
+    <div class="four wide column"><img [src]="movie.poster_path" class="ui fluid rounded image" alt="cover photo">
+    </div>
+    <div class="eight wide column">
+      <div class="row">
+        <div class="one wide column">
+          <h1>{{movie.title}}</h1>
+        </div>
+      </div>
+      <div class="row">
+        {{movie.overview}}
+      </div>
+      <div class="row">
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
