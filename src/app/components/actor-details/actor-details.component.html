@@ -1,0 +1,43 @@
+<div *ngIf="actor$ | async; let actor" class=" ui fluid container grid">
+  <div class="row">
+    <div class="four wide column"><img [src]="actor.profile_path" class="ui fluid rounded image notClickable" alt="">
+    </div>
+    <div class="eight wide column">
+      <div class="row">
+        <div class="one wide column">
+          <h1>{{actor.name}}</h1>
+        </div>
+      </div>
+      <p>{{actor.biography}}</p>
+      <p *ngIf="actor.birthday">Born: {{actor.birthday}} in {{actor.place_of_birth}}</p>
+      <p *ngIf="actor.deathday">Died: {{actor.deathday}}</p>
+    </div>
+  </div>
+  <table style="width: inherit" class="cast_list" *ngIf="credits$ | async; let credits">
+    <tbody>
+      <tr style="border: 2px solid white; max-height: 10px" *ngFor="let c of credits">
+        <div *ngIf="(c.media_type == 'movie')">
+          <td><img width="10%" class="ui tiny rounded image" [src]="c.poster_path" alt="asd">
+          </td>
+          <td valign="top" width="87%"><strong [routerLink]="['/movies', c.id]" routerLinkActive="router-link-active"
+              class="clickable">{{c.title}}</strong> <br>
+            {{c.character}}</td>
+          <td valign="top" width="3%" *ngIf="c.release_date">
+            {{c.release_date | date: "yyyy" }}</td>
+        </div>
+        <div *ngIf=" (c.media_type=='tv' )">
+          <td><img class="ui tiny rounded image" width="10%" [src]="c.poster_path" alt="asd">
+          </td>
+          <td valign="top" width="87%"><strong [routerLink]="['/series', c.id]" routerLinkActive="router-link-active"
+              class="clickable">{{c.name}}</strong> (TV
+            Series) <br>
+            {{c.character}}</td>
+
+          <td valign="top" width="3%" *ngIf="c.first_air_date">
+            {{c.first_air_date | date: "yyyy"}}</td>
+        </div>
+
+      </tr>
+    </tbody>
+  </table>
+</div>

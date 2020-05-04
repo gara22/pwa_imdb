@@ -18,4 +18,20 @@
       </div>
     </div>
   </div>
+
+  <table style="width: inherit" *ngIf="cast$ | async; let cast">
+    <caption>
+      <div class="ui divider"></div>
+      <h2>Cast</h2>
+    </caption>
+    <tbody>
+      <tr style="border: 1px solid white" *ngFor="let c of cast">
+        <td><img class="ui tiny image" [src]="c.profile_path" [alt]=c.name></td>
+        <td><span [routerLink]="['/actor', c.id]">{{c.name}}</span></td>
+        <td>. . .</td>
+        <td>{{c.character}}</td>
+      </tr>
+    </tbody>
+  </table>
+
 </div>

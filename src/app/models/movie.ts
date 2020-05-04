@@ -16,3 +16,23 @@ export interface MovieResponse {
   vote_average: number;
   vote_count: number;
 }
+
+export interface CombinedCredit {
+  character: string;
+  id: number;
+  media_type: string;
+  poster_path: string;
+  release_date?: Date;
+  title?: string;
+  name?: string;
+  first_air_date?;
+}
+
+export interface Series {
+  first_air_date: Date;
+  id: string;
+  last_air_date: Date;
+  name: string;
+  overview: string;
+  poster_path;
+}

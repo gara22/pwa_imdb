@@ -6,15 +6,24 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent } from './components/app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HeaderComponent } from './header/header.component';
-import { MovieListComponent } from './movie-list/movie-list.component';
+import { HeaderComponent } from './components/header/header.component';
+import { MovieListComponent } from './components/movie-list/movie-list.component';
 import { HttpClientModule } from '@angular/common/http';
-import { MovieDetailsComponent } from './movie-details/movie-details.component';
+import { MovieDetailsComponent } from './components/movie-details/movie-details.component';
+import { ActorDetailsComponent } from './components/actor-details/actor-details.component';
+import { SeriesDetailsComponent } from './components/series-details/series-details.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, MovieListComponent, MovieDetailsComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    MovieListComponent,
+    MovieDetailsComponent,
+    ActorDetailsComponent,
+    SeriesDetailsComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

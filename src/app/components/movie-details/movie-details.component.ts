@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MovieService } from '../services/movie.service';
+import { MovieService } from '../../services/movie.service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { MovieResponse } from '../models/movie';
-import { map } from 'rxjs/operators';
+import { MovieResponse } from '../../models/movie';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-movie-details',
@@ -17,6 +17,7 @@ export class MovieDetailsComponent implements OnInit {
   ) {}
 
   movie$: Observable<MovieResponse>;
+  cast$: Observable<any>;
 
   ngOnInit(): void {
     let id;
@@ -27,6 +28,9 @@ export class MovieDetailsComponent implements OnInit {
         return m;
       })
     );
-    console.log(this.movie$);
+
+    this.cast$ = this.movieService
+      .getCastByMovieId(id)
+      .pipe(tap((a) => console.log(a)));
   }
 }

@@ -1,0 +1,26 @@
+<div *ngIf="series$ | async; let series" class="ui fluid container grid">
+  <div class="row">
+    <div class="four wide column"><img [src]="series.poster_path" class="img-fluid rounded float-right notClickable"
+        alt=""></div>
+    <div class="eight wide column">
+      <div class="row">
+        <div class="one wide column">
+          <h1>{{series.name}}</h1>
+        </div>
+
+      </div>
+      {{series.overview}}
+    </div>
+  </div>
+
+  <table style="width: inherit" class="cast_list" *ngIf="credits$ | async; let credits">
+    <tbody>
+      <tr *ngFor="let c of credits">
+        <td><img class="ui tiny image" [src]="c.profile_path" alt="asd"></td>
+        <td><span [routerLink]="['/actor', c.id]" routerLinkActive="router-link-active">{{c.name}}</span></td>
+        <td>. . .</td>
+        <td>{{c.character}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
