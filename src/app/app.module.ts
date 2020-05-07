@@ -15,6 +15,8 @@ import { MovieDetailsComponent } from './components/movie-details/movie-details.
 import { ActorDetailsComponent } from './components/actor-details/actor-details.component';
 import { SeriesDetailsComponent } from './components/series-details/series-details.component';
 import { SearchComponent } from './components/search/search.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,8 @@ import { SearchComponent } from './components/search/search.component';
     HttpClientModule,
     MatListModule,
     MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,48 +1,70 @@
-<ng-container *ngIf="searchResults$ | async; let searchResults">
-  <div *ngFor="let item of searchResults">
-    <div class="ui fluid container grid">
-      <div class="four wide column">
-        <ng-container *ngIf="item['media_type'] === 'movie'">
-          <img [src]="item['poster_path']" class="ui fluid rounded image" alt="">
-        </ng-container>
-        <ng-container *ngIf="item['media_type'] === 'person'">
-          <img [src]="item['profile_path']" class="ui fluid rounded image" alt="">
-        </ng-container>
-        <ng-container *ngIf="item['media_type'] === 'tv'">
-          <img [src]="item['poster_path']" class="ui fluid rounded image" alt="">
-        </ng-container>
-      </div>
-      <div class="twelve wide column">
-        <div class="ui fluid container grid">
-          <div class="row">
-            <div class="fourteen wide column">
-              <ng-container *ngIf="item['media_type'] === 'movie'">
-                <h1 class="clickable">{{item['title']}}</h1>
-              </ng-container>
-              <ng-container *ngIf="item['media_type'] === 'person'">
-                <h1 class="clickable">{{item['name']}}</h1>
-              </ng-container>
-              <ng-container *ngIf="item['media_type'] === 'tv'">
-                <h1 class="clickable">{{item['name']}}</h1>
-              </ng-container>
-            </div>
-            <div class="two wide column">
-              <p>10/10</p>
-            </div>
-          </div>
-          <div class="row">
-            <ng-container *ngIf="item['media_type'] === 'movie' || item['media_type'] === 'tv'">
-              <div class="sixteen wide column" style="text-align: justify">{{item['overview']}}</div>
-            </ng-container>
+<div class="wrapper">
 
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="ui container">
+    <mat-form-field style="width: 100%;">
 
-    <!-- <div *ngIf="item['media_type'] === 'movie'">{{item['title']}}</div>
-  <div *ngIf="item['media_type'] === 'person'">{{item['name']}}</div>
-  <div *ngIf="item['media_type'] === 'tv'">{{item['name']}}</div> -->
+      <input #input matInput (input)="searchWord$.next(input.value)" placeholder="Search for movies, actors...">
+    </mat-form-field>
   </div>
 
-</ng-container>
+
+  <ng-container *ngIf="searchResults$ | async; let searchResults">
+    <div *ngFor="let item of searchResults">
+      <div class="ui container grid">
+        <div class="four wide column">
+          <ng-container *ngIf="item['media_type'] === 'movie'">
+            <img [routerLink]="['/movies', item['id']]" routerLinkActive="router-link-active"
+              [src]="item['poster_path']" class="ui fluid rounded image" alt="">
+          </ng-container>
+          <ng-container *ngIf="item['media_type'] === 'person'">
+            <img [routerLink]="['/actor', item['id']]" [src]="item['profile_path']" class="ui fluid rounded image"
+              alt="">
+          </ng-container>
+          <ng-container *ngIf="item['media_type'] === 'tv'">
+            <img [routerLink]="['/series', item['id']]" [src]="item['poster_path']" class="ui fluid rounded image"
+              alt="">
+          </ng-container>
+        </div>
+        <div class="twelve wide column">
+          <div class="ui fluid container grid">
+            <div class="row">
+              <div class="fourteen wide column">
+                <ng-container *ngIf="item['media_type'] === 'movie'">
+                  <h1 [routerLink]="['/movies', item['id']]" class="clickable">{{item['title']}} </h1>
+                </ng-container>
+                <ng-container *ngIf="item['media_type'] === 'person'">
+                  <h1 [routerLink]="['/actor', item['id']]" class="clickable">{{item['name']}}
+                    ({{item['known_for_department']}})</h1>
+                </ng-container>
+                <ng-container *ngIf="item['media_type'] === 'tv'">
+                  <h1 [routerLink]="['/series', item['id']]" class="clickable">{{item['name']}} (TV series)</h1>
+                </ng-container>
+              </div>
+              <div class="two wide column">
+                <p>10/10</p>
+              </div>
+            </div>
+            <div class="row">
+              <ng-container *ngIf="item['media_type'] === 'movie' || item['media_type'] === 'tv'">
+                <div class="sixteen wide column" style="text-align: justify">{{item['overview']}}</div>
+              </ng-container>
+
+            </div>
+
+          </div>
+
+        </div>
+        <div class="sixteen wide column">
+          <div class="ui divider"></div>
+        </div>
+      </div>
+
+
+      <!-- <div *ngIf="item['media_type'] === 'movie'">{{item['title']}}</div>
+  <div *ngIf="item['media_type'] === 'person'">{{item['name']}}</div>
+  <div *ngIf="item['media_type'] === 'tv'">{{item['name']}}</div> -->
+    </div>
+
+  </ng-container>
+
+</div>
