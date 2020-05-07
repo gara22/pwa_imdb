@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { MovieResponse } from '../../models/movie';
-import { map, tap } from 'rxjs/operators';
+import { MovieResponse, Movie } from '../../models/movie';
+import { map, tap, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-movie-details',
@@ -16,21 +16,20 @@ export class MovieDetailsComponent implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {}
 
-  movie$: Observable<MovieResponse>;
+  movie$: Observable<Movie>;
   cast$: Observable<any>;
 
   ngOnInit(): void {
-    let id;
-    this.activatedRoute.paramMap.subscribe((res) => (id = res.get('id')));
-    this.movie$ = this.movieService.getMovieById(id).pipe(
-      map((m) => {
-        m.poster_path = `https://image.tmdb.org/t/p/w500/${m.poster_path}`;
-        return m;
-      })
+    const id$ = this.activatedRoute.paramMap.pipe(
+      map((params) => +params.get('id'))
     );
 
-    this.cast$ = this.movieService
-      .getCastByMovieId(id)
-      .pipe(tap((a) => console.log(a)));
+    this.movie$ = id$.pipe(
+      switchMap((id) => this.movieService.getMovieById(id))
+    );
+
+    this.cast$ = id$.pipe(
+      switchMap((id) => this.movieService.getCastByMovieId(id))
+    );
   }
 }

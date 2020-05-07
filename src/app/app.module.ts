@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MovieDetailsComponent } from './components/movie-details/movie-details.component';
 import { ActorDetailsComponent } from './components/actor-details/actor-details.component';
 import { SeriesDetailsComponent } from './components/series-details/series-details.component';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { SeriesDetailsComponent } from './components/series-details/series-detai
     MovieDetailsComponent,
     ActorDetailsComponent,
     SeriesDetailsComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,
