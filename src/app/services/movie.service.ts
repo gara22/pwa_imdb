@@ -7,10 +7,11 @@ import {
   Movie,
   serializeMovie,
   serializeSeries,
+  setImgPath,
 } from '../models/movie';
 import { Observable } from 'rxjs';
 import { CastMember, Actor, serializeActor } from '../models/actor';
-import { map } from 'rxjs/operators';
+import { map, tap, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -181,9 +182,60 @@ export class MovieService {
         )
       );
   }
-}
 
-export function setImgPath(path: string) {
-  if (path) return 'https://image.tmdb.org/t/p/w500' + path;
-  return 'http://www.inimco.com/wp-content/themes/consultix/images/no-image-found-360x260.png';
+  getRandomMovieImages(): Observable<{
+    url: string;
+    titles: { title: string; goodAnswer: boolean; id: number }[];
+  }> {
+    let randPage = Math.floor(Math.random() * (500 - 1) + 1);
+    let randItem = Math.floor(Math.random() * (20 - 1) + 1);
+    let titles = [];
+    return this.http
+      .get(
+        `https://api.themoviedb.org/3/discover/movie?api_key=267f208d9a12f8a4b5c873c8f3bb7fa2&page=${randPage}`
+      )
+      .pipe(
+        // tap((res) => console.log(res['results'][randItem]['title'])),
+        tap((res) => {
+          let movieId = res['results'][randItem]['id'];
+          for (let i = 0; i < 3; i++) {
+            if (movieId !== res['results'][i]['id']) {
+              titles.push({
+                title: res['results'][i]['title'],
+                goodAnswer: false,
+              });
+            } else {
+              titles.push({
+                title: res['results'][3]['title'],
+                goodAnswer: false,
+              });
+            }
+          }
+          titles.push({
+            title: res['results'][randItem]['title'],
+            goodAnswer: true,
+          });
+        }),
+        map((res) => res['results'][randItem]['id']),
+        switchMap((id) => this.getImagesOfMovie(id)),
+        map((res) => {
+          if (res['backdrops'].length > 0) {
+            let ret = {
+              url: setImgPath(res['backdrops'][0]['file_path']),
+              titles: titles,
+            };
+
+            return ret;
+          }
+          return null;
+        })
+
+        // tap((a) => console.log(a))
+      );
+  }
+
+  getImagesOfMovie(id) {
+    let url = `https://api.themoviedb.org/3/movie/${id}/images?api_key=${this.key}`;
+    return this.http.get(url);
+  }
 }

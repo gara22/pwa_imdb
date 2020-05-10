@@ -1,5 +1,3 @@
-import { setImgPath } from '../services/movie.service';
-
 export interface Movie {
   id: number;
   overview: string;
@@ -80,4 +78,9 @@ export function serializeMovie(
     title: title,
     media_type: media_type,
   };
+}
+
+export function setImgPath(path: string): string {
+  if (path) return 'https://image.tmdb.org/t/p/w500' + path;
+  return 'http://www.inimco.com/wp-content/themes/consultix/images/no-image-found-360x260.png';
 }

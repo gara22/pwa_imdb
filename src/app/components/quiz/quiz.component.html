@@ -1,0 +1,14 @@
+<div *ngIf="loading" style="width: 10%;
+  margin: 0 auto">
+  <mat-spinner></mat-spinner>
+</div>
+
+<app-quiz-game *ngIf="!completed" [src$]="imgSrc$"></app-quiz-game>
+
+<ng-container *ngIf="completed">
+  <div class="ui container" style="text-align: center;">
+    <h2>Game over <br> Score: {{score}} / 10</h2>
+    <div (click)="newGame()" class="ui button">New Game</div>
+  </div>
+
+</ng-container>

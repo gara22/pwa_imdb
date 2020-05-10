@@ -1,0 +1,8 @@
+<div *ngIf="src$ | async; let item" class="ui container wrapper">
+  <img class="ui centered rounded image" [src]="item.url" alt="">
+  <div (click)="selectAnswer(title)" *ngFor="let title of item.titles; let i = index"
+    [ngClass]="title.goodAnswer && answered ? 'good': ''" [ngClass]="i !== title.id && answered? 'bad': ''"
+    class="ui container answer-container">
+    {{title.title}}
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { setImgPath } from '../services/movie.service';
+import { setImgPath } from './movie';
 
 export interface Actor {
   biography: string;

@@ -17,6 +17,9 @@ import { SeriesDetailsComponent } from './components/series-details/series-detai
 import { SearchComponent } from './components/search/search.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { QuizComponent } from './components/quiz/quiz.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +30,8 @@ import { MatInputModule } from '@angular/material/input';
     ActorDetailsComponent,
     SeriesDetailsComponent,
     SearchComponent,
+    QuizComponent,
+    QuizGameComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +44,7 @@ import { MatInputModule } from '@angular/material/input';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
