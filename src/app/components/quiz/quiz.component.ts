@@ -8,6 +8,8 @@ import {
   takeUntil,
   take,
   finalize,
+  last,
+  switchMap,
 } from 'rxjs/operators';
 import { QuizService } from 'src/app/services/quiz.service';
 
@@ -30,6 +32,7 @@ export class QuizComponent implements OnInit, OnDestroy {
   completed: boolean = false;
   score: number;
   quizSub: Subscription;
+  scoreSub: Subscription;
 
   private shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -78,12 +81,15 @@ export class QuizComponent implements OnInit, OnDestroy {
           this.loading = true;
         }),
         finalize(() => {
-          this.score = this.quizService.getScore();
           this.loading = false;
           this.completed = true;
         })
       )
       .subscribe();
+
+    this.scoreSub = this.quizService
+      .getScore()
+      .subscribe((score) => (this.score = score));
   }
 
   ngOnInit(): void {
@@ -91,5 +97,6 @@ export class QuizComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     this.quizSub.unsubscribe();
+    this.scoreSub.unsubscribe();
   }
 }

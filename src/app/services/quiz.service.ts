@@ -11,6 +11,7 @@ export class QuizService {
   }>();
 
   score: number = 0;
+  scoreSubject = new Subject<number>();
 
   getAnswerSubj() {
     return this.answerSubject.asObservable();
@@ -19,10 +20,11 @@ export class QuizService {
   answer(answer: { title: string; goodAnswer: boolean }) {
     this.answerSubject.next(answer);
     if (answer.goodAnswer) this.score++;
+    this.scoreSubject.next(this.score);
   }
 
   getScore() {
-    return this.score;
+    return this.scoreSubject.asObservable();
   }
 
   newGame() {
