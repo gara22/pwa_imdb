@@ -21,15 +21,26 @@ export class MovieService {
 
   constructor(private http: HttpClient) {}
 
-  getMovies(params?) {
+  getMovies(params?): Observable<Movie[]> {
     let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${this.key}`;
 
-    return this.http.get<{
-      page: number;
-      results: Array<MovieResponse>;
-      total_pages: number;
-      total_results: number;
-    }>(url);
+    return this.http.get(url).pipe(
+      map((res) => {
+        res['results'] = res['results'].map((movie) => {
+          const ret = serializeMovie(
+            movie['id'],
+            movie['overview'],
+            movie['poster_path'],
+            movie['title'],
+            'movie'
+          );
+          return ret;
+        });
+
+        return res['results'];
+      }),
+      tap(console.log)
+    );
   }
 
   getMovieById(id: number): Observable<Movie> {

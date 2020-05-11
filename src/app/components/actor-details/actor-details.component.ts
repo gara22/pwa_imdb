@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Actor } from 'src/app/models/actor';
 import { ActivatedRoute } from '@angular/router';
 import { CombinedCredit } from 'src/app/models/movie';
-import { tap } from 'rxjs/operators';
+import { tap, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-actor-details',
@@ -20,11 +20,14 @@ export class ActorDetailsComponent implements OnInit {
   actor$: Observable<Actor>;
   credits$: Observable<CombinedCredit[]>;
   ngOnInit(): void {
-    let id;
-    this.activatedRoute.paramMap.subscribe((res) => (id = res.get('id')));
-    this.actor$ = this.movieService.getActorById(id);
-    this.credits$ = this.movieService
-      .getCombinedCredits(id)
-      .pipe(tap((a) => console.log(a)));
+    const id$ = this.activatedRoute.paramMap.pipe(
+      map((params) => +params.get('id'))
+    );
+    this.actor$ = id$.pipe(
+      switchMap((id) => this.movieService.getActorById(id))
+    );
+    this.credits$ = id$.pipe(
+      switchMap((id) => this.movieService.getCombinedCredits(id))
+    );
   }
 }

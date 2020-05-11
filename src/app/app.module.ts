@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { QuizComponent } from './components/quiz/quiz.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
+import { ToplistComponent } from './components/toplist/toplist.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
     SearchComponent,
     QuizComponent,
     QuizGameComponent,
+    ToplistComponent,
   ],
   imports: [
     BrowserModule,

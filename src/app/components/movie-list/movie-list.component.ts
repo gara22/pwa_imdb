@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
 import { Observable } from 'rxjs';
 import { map, mapTo, tap } from 'rxjs/operators';
-import { MovieResponse } from '../../models/movie';
+import { MovieResponse, Movie, Series } from '../../models/movie';
+import { Actor } from 'src/app/models/actor';
 
 @Component({
   selector: 'app-movie-list',
@@ -12,21 +13,9 @@ import { MovieResponse } from '../../models/movie';
 export class MovieListComponent implements OnInit {
   constructor(private movieService: MovieService) {}
 
-  movies: Observable<MovieResponse[]>;
+  @Input() items$: Observable<Array<Movie | Actor | Series>>;
 
   ngOnInit(): void {
-    this.movies = this.movieService.getMovies().pipe(
-      map((res) =>
-        res.results.map((m) => {
-          if (m.poster_path !== undefined)
-            m.poster_path = `https://image.tmdb.org/t/p/w500/${m.poster_path}`;
-          else
-            m.poster_path =
-              'http://www.inimco.com/wp-content/themes/consultix/images/no-image-found-360x260.png';
-          return m;
-        })
-      ),
-      tap((a) => console.log(a))
-    );
+    console.log(this.items$);
   }
 }

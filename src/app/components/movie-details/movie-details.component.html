@@ -26,7 +26,7 @@
     </caption>
     <tbody>
       <tr style="border: 1px solid white" *ngFor="let c of cast">
-        <td><img class="ui tiny image" [src]="c.profile_path" [alt]=c.name></td>
+        <td><img class="ui tiny rounded image" [src]="c.profile_path" [alt]=c.name></td>
         <td><span [routerLink]="['/actor', c.id]">{{c.name}}</span></td>
         <td>. . .</td>
         <td>{{c.character}}</td>
