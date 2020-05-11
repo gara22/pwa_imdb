@@ -29,7 +29,6 @@ export class SearchComponent implements OnInit {
 
     this.searchResults$ = this.searchWord$.pipe(
       filter((word) => word.length > 2),
-      tap(console.log),
       debounceTime(500),
       distinctUntilChanged(),
       switchMap((word) => this.movieService.searchMulti(word))

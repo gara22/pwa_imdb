@@ -8,7 +8,7 @@
           <h1>{{movie.title}}</h1>
         </div>
       </div>
-      <div class="row">
+      <div class="row overview">
         {{movie.overview}}
       </div>
       <div class="row">
@@ -19,6 +19,12 @@
     </div>
   </div>
 
+  <div *ngIf="loading" style="width: 10%;
+    margin: 0 auto">
+    <mat-spinner></mat-spinner>
+  </div>
+
+
   <table style="width: inherit" *ngIf="cast$ | async; let cast">
     <caption>
       <div class="ui divider"></div>
@@ -26,7 +32,7 @@
     </caption>
     <tbody>
       <tr style="border: 1px solid white" *ngFor="let c of cast">
-        <td><img class="ui tiny rounded image" [src]="c.profile_path" [alt]=c.name></td>
+        <td><img [routerLink]="['/actor', c.id]" class="ui tiny rounded image" [src]="c.profile_path" [alt]=c.name></td>
         <td><span [routerLink]="['/actor', c.id]">{{c.name}}</span></td>
         <td>. . .</td>
         <td>{{c.character}}</td>

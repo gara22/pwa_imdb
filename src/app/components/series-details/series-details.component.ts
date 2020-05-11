@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Series } from 'src/app/models/movie';
 import { CastMember } from 'src/app/models/actor';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-series-details',
@@ -19,6 +19,7 @@ export class SeriesDetailsComponent implements OnInit {
 
   series$: Observable<Series>;
   credits$: Observable<CastMember[]>;
+  loading = true;
 
   ngOnInit(): void {
     const id$ = this.activatedRoute.paramMap.pipe(
@@ -29,7 +30,8 @@ export class SeriesDetailsComponent implements OnInit {
       switchMap((id) => this.movieService.getSeriesDetails(id))
     );
     this.credits$ = id$.pipe(
-      switchMap((id) => this.movieService.getTVCredits(id))
+      switchMap((id) => this.movieService.getTVCredits(id)),
+      tap(() => (this.loading = false))
     );
   }
 }

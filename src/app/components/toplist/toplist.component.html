@@ -10,6 +10,11 @@
   </mat-form-field>
 
 </div>
+<div *ngIf="loading" style="width: 10%;
+  margin: 0 auto">
+  <mat-spinner></mat-spinner>
+</div>
+
 
 <app-movie-list *ngIf="items$" [items$]="items$"></app-movie-list>
 <div class="ui container">

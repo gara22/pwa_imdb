@@ -3,7 +3,7 @@ import { MovieService } from '../../services/movie.service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { MovieResponse, Movie } from '../../models/movie';
-import { map, tap, switchMap } from 'rxjs/operators';
+import { map, tap, switchMap, mapTo } from 'rxjs/operators';
 
 @Component({
   selector: 'app-movie-details',
@@ -18,6 +18,7 @@ export class MovieDetailsComponent implements OnInit {
 
   movie$: Observable<Movie>;
   cast$: Observable<any>;
+  loading = true;
 
   ngOnInit(): void {
     const id$ = this.activatedRoute.paramMap.pipe(
@@ -29,7 +30,8 @@ export class MovieDetailsComponent implements OnInit {
     );
 
     this.cast$ = id$.pipe(
-      switchMap((id) => this.movieService.getCastByMovieId(id))
+      switchMap((id) => this.movieService.getCastByMovieId(id)),
+      tap(() => (this.loading = false))
     );
   }
 }

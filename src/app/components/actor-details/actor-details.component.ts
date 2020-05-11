@@ -19,6 +19,7 @@ export class ActorDetailsComponent implements OnInit {
 
   actor$: Observable<Actor>;
   credits$: Observable<CombinedCredit[]>;
+  loading = true;
   ngOnInit(): void {
     const id$ = this.activatedRoute.paramMap.pipe(
       map((params) => +params.get('id'))
@@ -27,7 +28,8 @@ export class ActorDetailsComponent implements OnInit {
       switchMap((id) => this.movieService.getActorById(id))
     );
     this.credits$ = id$.pipe(
-      switchMap((id) => this.movieService.getCombinedCredits(id))
+      switchMap((id) => this.movieService.getCombinedCredits(id)),
+      tap(() => (this.loading = false))
     );
   }
 }

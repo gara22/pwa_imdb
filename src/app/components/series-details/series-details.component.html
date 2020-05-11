@@ -9,14 +9,22 @@
         </div>
 
       </div>
-      {{series.overview}}
+      <div class="overview">
+        {{series.overview}}
+      </div>
+
     </div>
+  </div>
+
+  <div *ngIf="loading" style="width: 10%;
+  margin: 0 auto">
+    <mat-spinner></mat-spinner>
   </div>
 
   <table style="width: inherit" class="cast_list" *ngIf="credits$ | async; let credits">
     <tbody>
       <tr *ngFor="let c of credits">
-        <td><img class="ui tiny image" [src]="c.profile_path" alt="asd"></td>
+        <td><img [routerLink]="['/actor', c.id]" class="ui tiny image" [src]="c.profile_path" alt="asd"></td>
         <td><span [routerLink]="['/actor', c.id]" routerLinkActive="router-link-active">{{c.name}}</span></td>
         <td>. . .</td>
         <td>{{c.character}}</td>

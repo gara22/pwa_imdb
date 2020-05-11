@@ -8,32 +8,38 @@
           <h1>{{actor.name}}</h1>
         </div>
       </div>
-      <p>{{actor.biography}}</p>
-      <p *ngIf="actor.birthday">Born: {{actor.birthday}} in {{actor.place_of_birth}}</p>
-      <p *ngIf="actor.deathday">Died: {{actor.deathday}}</p>
+      <p class="overview">{{actor.biography}}</p>
+      <p class="overview" *ngIf="actor.birthday">Born: {{actor.birthday}} in {{actor.place_of_birth}}</p>
+      <p class="overview" *ngIf="actor.deathday">Died: {{actor.deathday}}</p>
     </div>
+  </div>
+
+  <div *ngIf="loading" style="width: 10%;
+    margin: 0 auto">
+    <mat-spinner></mat-spinner>
   </div>
   <table style="width: inherit" class="cast_list" *ngIf="credits$ | async; let credits">
     <tbody>
-      <tr style="border: 2px solid white; max-height: 10px" *ngFor="let c of credits">
+      <tr style="border: 2px solid white" *ngFor="let c of credits">
         <div *ngIf="(c.media_type == 'movie')">
-          <td><img width="10%" class="ui tiny rounded image" [src]="c.poster_path" alt="asd">
+          <td><img [routerLink]="['/movies', c.id]" width="10%" class="ui tiny rounded image" [src]="c.poster_path"
+              alt="asd">
           </td>
-          <td valign="top" width="87%"><strong [routerLink]="['/movies', c.id]" routerLinkActive="router-link-active"
-              class="clickable">{{c.title}}</strong> <br>
+          <td valign="middle" width="87%"><strong [routerLink]="['/movies', c.id]"> <span> {{c.title}}</span></strong>
+            <br>
             {{c.character}}</td>
-          <td valign="top" width="3%" *ngIf="c.release_date">
+          <td valign="middle" width="3%" *ngIf="c.release_date">
             {{c.release_date | date: "yyyy" }}</td>
         </div>
         <div *ngIf=" (c.media_type=='tv' )">
-          <td><img class="ui tiny rounded image" width="10%" [src]="c.poster_path" alt="asd">
+          <td><img [routerLink]="['/series', c.id]" class="ui tiny rounded image" width="10%" [src]="c.poster_path"
+              alt="asd">
           </td>
-          <td valign="top" width="87%"><strong [routerLink]="['/series', c.id]" routerLinkActive="router-link-active"
-              class="clickable">{{c.name}}</strong> (TV
+          <td valign="middle" width="87%"><strong [routerLink]="['/series', c.id]"><span>{{c.name}}</span></strong> (TV
             Series) <br>
             {{c.character}}</td>
 
-          <td valign="top" width="3%" *ngIf="c.first_air_date">
+          <td valign="middle" width="3%" *ngIf="c.first_air_date">
             {{c.first_air_date | date: "yyyy"}}</td>
         </div>
 

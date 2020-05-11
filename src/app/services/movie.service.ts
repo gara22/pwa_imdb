@@ -23,7 +23,7 @@ export class MovieService {
 
   getMovies(params?, page?: number): Observable<Movie[]> {
     let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${this.key}`;
-    if (params) url += `&with_genres=${params.genreId}`;
+    if (params.genreId) url += `&with_genres=${params.genreId}`;
     if (page) url += `&page=${page}`;
 
     return this.http.get(url).pipe(

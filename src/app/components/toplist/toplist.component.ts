@@ -16,6 +16,7 @@ export class ToplistComponent implements OnInit {
   page$: Observable<number>;
   genres$ = new BehaviorSubject<number>(12);
   genres = [];
+  loading = true;
 
   constructor(
     private movieService: MovieService,
@@ -24,6 +25,7 @@ export class ToplistComponent implements OnInit {
   ) {}
 
   onPageAction(event) {
+    this.loading = true;
     let page = event.pageIndex;
     let previousPageIndex = event.previousPageIndex;
     if (page > previousPageIndex) {
@@ -38,6 +40,7 @@ export class ToplistComponent implements OnInit {
     this.genres = json.genres;
   }
   onSelect(event) {
+    this.loading = true;
     this.genres$.next(event.value);
   }
 
@@ -56,7 +59,8 @@ export class ToplistComponent implements OnInit {
             this.movieService.getMovies({ genreId: genre }, page + 1)
           )
         );
-      })
+      }),
+      tap(() => (this.loading = false))
     );
     this.loadGenres();
   }
