@@ -1,3 +1,16 @@
+<div class="ui container">
+  <h1>Top 100</h1>
+  <mat-form-field>
+    <mat-label>Genre</mat-label>
+    <mat-select (selectionChange)="onSelect($event)">
+      <mat-option *ngFor="let genre of genres" [value]="genre.id">
+        {{genre.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+
 <app-movie-list *ngIf="items$" [items$]="items$"></app-movie-list>
 <div class="ui container">
   <mat-paginator [pageIndex]="page$ |async" (page)="onPageAction($event)" [length]="100" [pageSize]="20">

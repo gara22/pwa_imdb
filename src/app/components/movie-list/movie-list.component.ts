@@ -15,7 +15,5 @@ export class MovieListComponent implements OnInit {
 
   @Input() items$: Observable<Array<Movie | Actor | Series>>;
 
-  ngOnInit(): void {
-    console.log(this.items$);
-  }
+  ngOnInit(): void {}
 }

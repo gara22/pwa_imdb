@@ -23,6 +23,7 @@ export class MovieService {
 
   getMovies(params?, page?: number): Observable<Movie[]> {
     let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${this.key}`;
+    if (params) url += `&with_genres=${params.genreId}`;
     if (page) url += `&page=${page}`;
 
     return this.http.get(url).pipe(
@@ -39,8 +40,7 @@ export class MovieService {
         });
 
         return res['results'];
-      }),
-      tap(console.log)
+      })
     );
   }
 
@@ -160,7 +160,6 @@ export class MovieService {
         map((res) =>
           res['results'].map((obj) => {
             if (obj['media_type'] === 'person') {
-              console.log(obj);
               return serializeActor(
                 obj['biography'],
                 obj['birthday'],
@@ -207,7 +206,6 @@ export class MovieService {
         `https://api.themoviedb.org/3/discover/movie?api_key=267f208d9a12f8a4b5c873c8f3bb7fa2&page=${randPage}`
       )
       .pipe(
-        // tap((res) => console.log(res['results'][randItem]['title'])),
         tap((res) => {
           let movieId = res['results'][randItem]['id'];
           for (let i = 0; i < 3; i++) {
@@ -241,8 +239,6 @@ export class MovieService {
           }
           return null;
         })
-
-        // tap((a) => console.log(a))
       );
   }
 

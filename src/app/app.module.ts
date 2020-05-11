@@ -22,6 +22,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
 import { ToplistComponent } from './components/toplist/toplist.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatInputModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

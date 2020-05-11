@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Movie, Series } from 'src/app/models/movie';
 import { Actor } from 'src/app/models/actor';
 import { MovieService } from 'src/app/services/movie.service';
@@ -14,6 +14,8 @@ import { map, switchMap, tap } from 'rxjs/operators';
 export class ToplistComponent implements OnInit {
   items$: Observable<Array<Movie | Actor | Series>>;
   page$: Observable<number>;
+  genres$ = new BehaviorSubject<number>(12);
+  genres = [];
 
   constructor(
     private movieService: MovieService,
@@ -23,7 +25,6 @@ export class ToplistComponent implements OnInit {
 
   onPageAction(event) {
     let page = event.pageIndex;
-    let length = event.length;
     let previousPageIndex = event.previousPageIndex;
     if (page > previousPageIndex) {
       this.router.navigate(['/toplist', 'page', page + 1]);
@@ -32,12 +33,31 @@ export class ToplistComponent implements OnInit {
     }
   }
 
+  loadGenres() {
+    const json = require('../../../assets/genres.json');
+    this.genres = json.genres;
+  }
+  onSelect(event) {
+    this.genres$.next(event.value);
+  }
+
   ngOnInit(): void {
     this.page$ = this.activatedRoute.paramMap.pipe(
       map((params) => +params.get('page') - 1, tap(console.log))
     );
+    // this.items$ = this.page$.pipe(
+    //   switchMap((page) => this.movieService.getMovies(null, page))
+    // );
+
     this.items$ = this.page$.pipe(
-      switchMap((page) => this.movieService.getMovies(null, page))
+      switchMap((page) => {
+        return this.genres$.pipe(
+          switchMap((genre) =>
+            this.movieService.getMovies({ genreId: genre }, page + 1)
+          )
+        );
+      })
     );
+    this.loadGenres();
   }
 }
