@@ -1,0 +1,18 @@
+<div class="ui grid container">
+  <div *ngFor="let article of news$ | async" class="five wide column">
+    <mat-card class="article-card">>
+      <img mat-card-image [src]="article.urlToImage" alt="nem dobott url-t a news api :/">
+      <mat-card-content>
+        <h3><strong>{{article.title}}</strong> </h3>
+        <p>
+          {{article.description}}
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button (click)="seeArticle(article.url)" mat-button>Read more..</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+
+</div>

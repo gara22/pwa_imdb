@@ -23,6 +23,9 @@ import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
 import { ToplistComponent } from './components/toplist/toplist.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { NewsComponent } from './components/news/news.component';
+import { HomeComponent } from './components/home/home.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,8 @@ import { MatSelectModule } from '@angular/material/select';
     QuizComponent,
     QuizGameComponent,
     ToplistComponent,
+    NewsComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,6 +56,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatProgressSpinnerModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatExpansionModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

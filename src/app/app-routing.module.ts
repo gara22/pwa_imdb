@@ -7,6 +7,7 @@ import { SeriesDetailsComponent } from './components/series-details/series-detai
 import { SearchComponent } from './components/search/search.component';
 import { QuizComponent } from './components/quiz/quiz.component';
 import { ToplistComponent } from './components/toplist/toplist.component';
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
   { path: 'movies/:id', component: MovieDetailsComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: 'quiz', component: QuizComponent },
   { path: 'toplist/page/:page', component: ToplistComponent },
+  { path: 'home', component: HomeComponent },
 ];
 
 @NgModule({
