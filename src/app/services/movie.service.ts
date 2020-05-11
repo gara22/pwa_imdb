@@ -21,8 +21,9 @@ export class MovieService {
 
   constructor(private http: HttpClient) {}
 
-  getMovies(params?): Observable<Movie[]> {
+  getMovies(params?, page?: number): Observable<Movie[]> {
     let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${this.key}`;
+    if (page) url += `&page=${page}`;
 
     return this.http.get(url).pipe(
       map((res) => {

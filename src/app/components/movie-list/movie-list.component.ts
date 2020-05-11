@@ -11,7 +11,7 @@ import { Actor } from 'src/app/models/actor';
   styleUrls: ['./movie-list.component.sass'],
 })
 export class MovieListComponent implements OnInit {
-  constructor(private movieService: MovieService) {}
+  constructor() {}
 
   @Input() items$: Observable<Array<Movie | Actor | Series>>;
 

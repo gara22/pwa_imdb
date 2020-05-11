@@ -1,1 +1,6 @@
 <app-movie-list *ngIf="items$" [items$]="items$"></app-movie-list>
+<div class="ui container">
+  <mat-paginator [pageIndex]="page$ |async" (page)="onPageAction($event)" [length]="100" [pageSize]="20">
+  </mat-paginator>
+
+</div>

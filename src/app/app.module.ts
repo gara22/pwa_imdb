@@ -21,6 +21,7 @@ import { QuizComponent } from './components/quiz/quiz.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { QuizGameComponent } from './components/quiz-game/quiz-game.component';
 import { ToplistComponent } from './components/toplist/toplist.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { ToplistComponent } from './components/toplist/toplist.component';
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

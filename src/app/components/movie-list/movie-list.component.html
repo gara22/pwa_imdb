@@ -1,29 +1,3 @@
-<!-- <div class="ui container">
-  <ng-container *ngIf="movies">
-    <div *ngFor="let movie of movies | async" class="ui fluid container grid">
-      <div class="four wide column"><img [src]=movie.poster_path class="ui fluid rounded image" alt=""></div>
-      <div class="twelve wide column">
-        <div class="ui fluid container grid">
-          <div class="row">
-            <div class="fourteen wide column">
-              <h2 [routerLink]="movie.id" routerLinkActive="router-link-active" class="clickable">
-                {{movie.title}}</h2>
-            </div>
-            <div class="two wide column">
-              <p>{{movie.vote_average}}/10</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="sixteen wide column" style="text-align: justify">{{movie.overview}}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-container>
-
-
-
-</div> -->
 <ng-container *ngIf="items$|async; let items">
   <div *ngFor="let item of items">
     <div class="ui container grid">
