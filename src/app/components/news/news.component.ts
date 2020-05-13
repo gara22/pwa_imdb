@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NewsService } from 'src/app/services/news.service';
 import { Observable } from 'rxjs';
 import { Article } from 'src/app/models/article';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-news',
@@ -18,6 +19,6 @@ export class NewsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.news$ = this.newsService.getArticles();
+    this.news$ = this.newsService.getArticles().pipe(tap(console.log));
   }
 }

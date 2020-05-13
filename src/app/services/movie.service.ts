@@ -12,6 +12,7 @@ import {
 import { Observable } from 'rxjs';
 import { CastMember, Actor, serializeActor } from '../models/actor';
 import { map, tap, switchMap } from 'rxjs/operators';
+import { MovieStoreService } from './movie-store.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,10 @@ import { map, tap, switchMap } from 'rxjs/operators';
 export class MovieService {
   key = '267f208d9a12f8a4b5c873c8f3bb7fa2';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private movieStoreService: MovieStoreService
+  ) {}
 
   getMovies(params?, page?: number): Observable<Movie[]> {
     let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${this.key}`;

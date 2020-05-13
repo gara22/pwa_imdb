@@ -1,4 +1,4 @@
-<div class="ui grid container">
+<div class="ui stackable grid">
   <div *ngFor="let article of news$ | async" class="five wide column">
     <mat-card class="article-card">>
       <img mat-card-image [src]="article.urlToImage" alt="nem dobott url-t a news api :/">
