@@ -1,9 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MovieService } from '../../services/movie.service';
 import { Observable } from 'rxjs';
-import { map, mapTo, tap } from 'rxjs/operators';
-import { MovieResponse, Movie, Series } from '../../models/movie';
 import { Actor } from 'src/app/models/actor';
+import { Movie, Series } from 'src/app/models/movie';
 
 @Component({
   selector: 'app-movie-list',

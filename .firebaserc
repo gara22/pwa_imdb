@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "imdb-pwa": {
+      "hosting": {
+        "pwa-imdb": [
+          "imdb-pwa"
+        ]
+      }
+    }
+  }
+}

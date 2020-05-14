@@ -18,30 +18,29 @@
     margin: 0 auto">
     <mat-spinner></mat-spinner>
   </div>
-  <table style="width: inherit" class="cast_list" *ngIf="credits$ | async; let credits">
-    <tbody>
-      <tr style="border: 2px solid white" *ngFor="let c of credits">
-        <div *ngIf="(c.media_type == 'movie')">
-          <td><img [routerLink]="['/movies', c.id]" width="10%" class="ui tiny rounded image" [src]="c.poster_path"
-              alt="asd">
-          </td>
-          <td valign="middle" width="87%"><strong [routerLink]="['/movies', c.id]"> <span> {{c.title}}</span></strong>
-            <br>
-            {{c.character}}</td>
-          <td valign="middle" width="3%" *ngIf="c.release_date">
-            {{c.release_date | date: "yyyy" }}</td>
-        </div>
-        <div *ngIf=" (c.media_type=='tv' )">
-          <td><img [routerLink]="['/series', c.id]" class="ui tiny rounded image" width="10%" [src]="c.poster_path"
-              alt="asd">
-          </td>
-          <td valign="middle" width="87%"><strong [routerLink]="['/series', c.id]"><span>{{c.name}}</span></strong> (TV
-            Series) <br>
-            {{c.character}}</td>
 
-          <td valign="middle" width="3%" *ngIf="c.first_air_date">
-            {{c.first_air_date | date: "yyyy"}}</td>
-        </div>
+  <table style="width: inherit" *ngIf="credits$ | async; let credits">
+    <caption>
+      <div class="ui divider"></div>
+      <h2>Movies</h2>
+    </caption>
+    <tbody>
+      <tr style="border: 1px solid white" *ngFor="let c of credits">
+        <ng-container *ngIf="c.media_type == 'movie'">
+          <td><img [routerLink]="['/movie', c.id]" class="ui tiny rounded image" [src]="c.poster_path" [alt]=c.title>
+          </td>
+          <td><span [routerLink]="['/movie', c.id]"> <strong>{{c.title}}</strong> </span><br>{{c.character}}</td>
+          <!-- <td>. . .</td> -->
+          <td>{{c.release_date | date: 'yyyy'}}</td>
+        </ng-container>
+        <ng-container *ngIf="c.media_type == 'tv'">
+          <td><img [routerLink]="['/series', c.id]" class="ui tiny rounded image" [src]="c.poster_path" [alt]=c.title>
+          </td>
+          <td><span [routerLink]="['/series', c.id]"> <strong>{{c.name}} (TV series)</strong> <br>{{c.character}}</span>
+          </td>
+          <!-- <td>. . .</td> -->
+          <td>{{c.first_air_date | date: 'yyyy'}}</td>
+        </ng-container>
 
       </tr>
     </tbody>

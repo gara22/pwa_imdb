@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { MovieResponse, Movie } from '../../models/movie';
 import { map, tap, switchMap, mapTo } from 'rxjs/operators';
+import { Movie } from 'src/app/models/movie';
 
 @Component({
   selector: 'app-movie-details',

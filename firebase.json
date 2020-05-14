@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "pwa-imdb",
+      "public": "dist/pwa-imdb",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}
