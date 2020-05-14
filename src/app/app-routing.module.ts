@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: 'quiz', component: QuizComponent },
   { path: 'toplist/page/:page', component: ToplistComponent },
-  { path: 'home', component: HomeComponent },
+  { path: '**', component: HomeComponent },
 ];
 
 @NgModule({

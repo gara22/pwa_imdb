@@ -27,7 +27,6 @@ export class MovieStoreService {
               transaction = null;
               subscriber.next(request.result);
               subscriber.complete();
-              console.log('get movies');
             };
             return () => transaction?.abort();
           })
@@ -48,8 +47,6 @@ export class MovieStoreService {
             let transaction = db.transaction('movies', 'readwrite');
             transaction.objectStore('movies').put(movies, key);
             transaction.oncomplete = () => {
-              console.log('movies added');
-
               transaction = null;
               subscriber.complete();
             };
@@ -85,8 +82,6 @@ export class MovieStoreService {
             let transaction = db.transaction('movie', 'readwrite');
             transaction.objectStore('movie').put(movie, id);
             transaction.oncomplete = () => {
-              console.log('movies added');
-
               transaction = null;
               subscriber.complete();
             };

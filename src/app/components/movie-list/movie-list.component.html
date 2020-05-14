@@ -1,6 +1,6 @@
 <ng-container *ngIf="items$|async; let items">
   <div *ngFor="let item of items">
-    <div class="ui container grid">
+    <div class="ui container stackable grid">
       <div class="four wide column">
         <ng-container *ngIf="item['media_type'] === 'movie'">
           <img [routerLink]="['/movies', item['id']]" routerLinkActive="router-link-active" [src]="item['poster_path']"
@@ -14,7 +14,7 @@
         </ng-container>
       </div>
       <div class="twelve wide column">
-        <div class="ui fluid container grid">
+        <div class="ui fluid container stackable grid">
           <div class="row">
             <div class="fourteen wide column">
               <ng-container *ngIf="item['media_type'] === 'movie'">
@@ -27,9 +27,6 @@
               <ng-container *ngIf="item['media_type'] === 'tv'">
                 <h2 [routerLink]="['/series', item['id']]" class="clickable">{{item['name']}} (TV series)</h2>
               </ng-container>
-            </div>
-            <div class="two wide column">
-              <p>10/10</p>
             </div>
           </div>
           <div class="row">

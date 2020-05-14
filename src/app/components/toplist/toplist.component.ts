@@ -46,7 +46,7 @@ export class ToplistComponent implements OnInit {
 
   ngOnInit(): void {
     this.page$ = this.activatedRoute.paramMap.pipe(
-      map((params) => +params.get('page') - 1, tap(console.log))
+      map((params) => +params.get('page') - 1)
     );
     // this.items$ = this.page$.pipe(
     //   switchMap((page) => this.movieService.getMovies(null, page))

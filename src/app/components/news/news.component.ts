@@ -19,6 +19,6 @@ export class NewsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.news$ = this.newsService.getArticles().pipe(tap(console.log));
+    this.news$ = this.newsService.getArticles();
   }
 }
