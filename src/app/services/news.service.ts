@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, tap, shareReplay, switchMap, concatMap } from 'rxjs/operators';
 import { Article } from '../models/article';
+import { CacheService } from './cache.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NewsService {
-  constructor(private http: HttpClient) {
-    this.initDb();
+  constructor(private http: HttpClient, private cacheService: CacheService) {
+    this.db$ = cacheService.getDb();
   }
   private db$: Observable<IDBDatabase>;
 
@@ -81,8 +82,6 @@ export class NewsService {
               transaction.objectStore('article').put(article, article.url)
             );
             transaction.oncomplete = () => {
-              console.log('articles added succ');
-
               transaction = null;
               subscriber.complete();
             };
@@ -94,20 +93,5 @@ export class NewsService {
           })
       )
     );
-  }
-
-  private initDb(): void {
-    this.db$ = new Observable<IDBDatabase>((subscriber) => {
-      const openRequest = indexedDB.open('cache');
-      openRequest.onupgradeneeded = () => this.createDb(openRequest.result);
-      openRequest.onsuccess = () => {
-        subscriber.next(openRequest.result);
-        subscriber.complete();
-      };
-    }).pipe(shareReplay({ refCount: false, bufferSize: 1 }));
-  }
-
-  private createDb(db: IDBDatabase): void {
-    db.createObjectStore('article');
   }
 }

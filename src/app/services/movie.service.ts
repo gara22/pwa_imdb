@@ -9,10 +9,11 @@ import {
   serializeSeries,
   setImgPath,
 } from '../models/movie';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { CastMember, Actor, serializeActor } from '../models/actor';
-import { map, tap, switchMap } from 'rxjs/operators';
+import { map, tap, switchMap, delayWhen, defaultIfEmpty } from 'rxjs/operators';
 import { MovieStoreService } from './movie-store.service';
+import { MovieOnlineService } from './movie-online.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,45 +23,48 @@ export class MovieService {
 
   constructor(
     private http: HttpClient,
-    private movieStoreService: MovieStoreService
+    private movieStoreService: MovieStoreService,
+    private movieOnlineService: MovieOnlineService
   ) {}
 
   getMovies(params?, page?: number): Observable<Movie[]> {
-    let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${this.key}`;
-    if (params.genreId) url += `&with_genres=${params.genreId}`;
-    if (page) url += `&page=${page}`;
-
-    return this.http.get(url).pipe(
-      map((res) => {
-        res['results'] = res['results'].map((movie) => {
-          const ret = serializeMovie(
-            movie['id'],
-            movie['overview'],
-            movie['poster_path'],
-            movie['title'],
-            'movie'
-          );
-          return ret;
-        });
-
-        return res['results'];
-      })
-    );
+    return this.movieStoreService
+      .getMovies(params.genreId, page)
+      .pipe(
+        switchMap((cachedMovies) =>
+          !cachedMovies && navigator.onLine
+            ? this.movieOnlineService
+                .getMovies(params, page)
+                .pipe(
+                  delayWhen((movies) =>
+                    this.movieStoreService
+                      .putMovies(params.genreId, page, movies)
+                      .pipe(defaultIfEmpty(undefined))
+                  )
+                )
+            : of(cachedMovies)
+        )
+      );
   }
 
-  getMovieById(id: number): Observable<Movie> {
-    let url = `https://api.themoviedb.org/3/movie/${id}?api_key=${this.key}`;
-    return this.http.get(url).pipe(
-      map((res) => {
-        return serializeMovie(
-          res['id'],
-          res['overview'],
-          res['poster_path'],
-          res['title'],
-          res['media_type']
-        );
-      })
-    );
+  getMovieById(id: number) {
+    return this.movieStoreService
+      .getMovieById(id)
+      .pipe(
+        switchMap((cachedMovie) =>
+          !cachedMovie && navigator.onLine
+            ? this.movieOnlineService
+                .getMovieById(id)
+                .pipe(
+                  delayWhen((movie) =>
+                    this.movieStoreService
+                      .putMovie(id, movie)
+                      .pipe(defaultIfEmpty(undefined))
+                  )
+                )
+            : of(cachedMovie)
+        )
+      );
   }
 
   getCastByMovieId(id: number): Observable<CastMember> {
@@ -80,21 +84,23 @@ export class MovieService {
     );
   }
   getActorById(id: number): Observable<Actor> {
-    let url = `https://api.themoviedb.org/3/person/${id}?api_key=${this.key}`;
-    return this.http.get(url).pipe(
-      map((res) => {
-        return {
-          biography: res['biography'],
-          birthday: res['birthday'],
-          deathday: res['deathday'],
-          id: res['id'],
-          known_for_department: res['known_for_department'],
-          name: res['name'],
-          place_of_birth: res['place_of_birth'],
-          profile_path: setImgPath(res['profile_path']),
-        };
-      })
-    );
+    return this.movieStoreService
+      .getActorById(id)
+      .pipe(
+        switchMap((cachedActor) =>
+          !cachedActor && navigator.onLine
+            ? this.movieOnlineService
+                .getActorById(id)
+                .pipe(
+                  delayWhen((actor) =>
+                    this.movieStoreService
+                      .putActor(id, actor)
+                      .pipe(defaultIfEmpty(undefined))
+                  )
+                )
+            : of(cachedActor)
+        )
+      );
   }
 
   getCombinedCredits(actorId: number): Observable<CombinedCredit[]> {
@@ -120,22 +126,23 @@ export class MovieService {
   }
 
   getSeriesDetails(id: number): Observable<Series> {
-    let url = `https://api.themoviedb.org/3/tv/${id}?api_key=${this.key}`;
-    return this.http.get(url).pipe(
-      map((res) => {
-        return serializeSeries(
-          res['first_air_date'],
-
-          res['id'],
-          res['last_air_date'],
-
-          res['name'],
-          res['overview'],
-          res['poster_path'],
-          res['media_type']
-        );
-      })
-    );
+    return this.movieStoreService
+      .getSeriesById(id)
+      .pipe(
+        switchMap((cachedSeries) =>
+          !cachedSeries && navigator.onLine
+            ? this.movieOnlineService
+                .getSeriesDetails(id)
+                .pipe(
+                  delayWhen((series) =>
+                    this.movieStoreService
+                      .putSeries(id, series)
+                      .pipe(defaultIfEmpty(undefined))
+                  )
+                )
+            : of(cachedSeries)
+        )
+      );
   }
 
   getTVCredits(id: number): Observable<CastMember[]> {

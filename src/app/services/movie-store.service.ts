@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { shareReplay, switchMap } from 'rxjs/operators';
-import { Movie } from '../models/movie';
+import { Movie, Series } from '../models/movie';
+import { CacheService } from './cache.service';
+import { Actor } from '../models/actor';
 
 @Injectable({
   providedIn: 'root',
@@ -9,17 +11,61 @@ import { Movie } from '../models/movie';
 export class MovieStoreService {
   private db$: Observable<IDBDatabase>;
 
-  constructor() {
-    this.initDb();
+  constructor(private cacheService: CacheService) {
+    this.db$ = this.cacheService.getDb();
   }
 
-  public getMovies(category: number): Observable<Movie[]> {
+  public getMovies(category: number, page: number): Observable<Movie[]> {
     return this.db$.pipe(
       switchMap(
         (db) =>
           new Observable<Movie[]>((subscriber) => {
             let transaction = db.transaction('movies');
-            const request = transaction.objectStore('movies').get(category);
+            let key = category.toString() + '_' + page.toString();
+            const request = transaction.objectStore('movies').get(key);
+            transaction.oncomplete = () => {
+              transaction = null;
+              subscriber.next(request.result);
+              subscriber.complete();
+              console.log('get movies');
+            };
+            return () => transaction?.abort();
+          })
+      )
+    );
+  }
+
+  public putMovies(
+    category: number,
+    page: number,
+    movies: Movie[]
+  ): Observable<never> {
+    return this.db$.pipe(
+      switchMap(
+        (db) =>
+          new Observable<never>((subscriber) => {
+            let key = category.toString() + '_' + page.toString();
+            let transaction = db.transaction('movies', 'readwrite');
+            transaction.objectStore('movies').put(movies, key);
+            transaction.oncomplete = () => {
+              console.log('movies added');
+
+              transaction = null;
+              subscriber.complete();
+            };
+            return () => transaction?.abort();
+          })
+      )
+    );
+  }
+
+  getMovieById(id: number): Observable<Movie> {
+    return this.db$.pipe(
+      switchMap(
+        (db) =>
+          new Observable<Movie>((subscriber) => {
+            let transaction = db.transaction('movie');
+            const request = transaction.objectStore('movie').get(id);
             transaction.oncomplete = () => {
               transaction = null;
               subscriber.next(request.result);
@@ -31,13 +77,50 @@ export class MovieStoreService {
     );
   }
 
-  public putMovies(category: number, movies: Movie[]): Observable<never> {
+  public putMovie(id: number, movie: Movie): Observable<never> {
     return this.db$.pipe(
       switchMap(
         (db) =>
           new Observable<never>((subscriber) => {
-            let transaction = db.transaction('movies', 'readwrite');
-            transaction.objectStore('movies').put(movies, category);
+            let transaction = db.transaction('movie', 'readwrite');
+            transaction.objectStore('movie').put(movie, id);
+            transaction.oncomplete = () => {
+              console.log('movies added');
+
+              transaction = null;
+              subscriber.complete();
+            };
+            return () => transaction?.abort();
+          })
+      )
+    );
+  }
+
+  getActorById(id: number): Observable<Actor> {
+    return this.db$.pipe(
+      switchMap(
+        (db) =>
+          new Observable<Actor>((subscriber) => {
+            let transaction = db.transaction('actor');
+            const request = transaction.objectStore('actor').get(id);
+            transaction.oncomplete = () => {
+              transaction = null;
+              subscriber.next(request.result);
+              subscriber.complete();
+            };
+            return () => transaction?.abort();
+          })
+      )
+    );
+  }
+
+  public putActor(id: number, actor: Actor): Observable<never> {
+    return this.db$.pipe(
+      switchMap(
+        (db) =>
+          new Observable<never>((subscriber) => {
+            let transaction = db.transaction('actor', 'readwrite');
+            transaction.objectStore('actor').put(actor, id);
             transaction.oncomplete = () => {
               transaction = null;
               subscriber.complete();
@@ -48,18 +131,38 @@ export class MovieStoreService {
     );
   }
 
-  private initDb(): void {
-    this.db$ = new Observable<IDBDatabase>((subscriber) => {
-      const openRequest = indexedDB.open('cache');
-      openRequest.onupgradeneeded = () => this.createDb(openRequest.result);
-      openRequest.onsuccess = () => {
-        subscriber.next(openRequest.result);
-        subscriber.complete();
-      };
-    }).pipe(shareReplay({ refCount: false, bufferSize: 1 }));
+  getSeriesById(id: number): Observable<Series> {
+    return this.db$.pipe(
+      switchMap(
+        (db) =>
+          new Observable<Series>((subscriber) => {
+            let transaction = db.transaction('series');
+            const request = transaction.objectStore('series').get(id);
+            transaction.oncomplete = () => {
+              transaction = null;
+              subscriber.next(request.result);
+              subscriber.complete();
+            };
+            return () => transaction?.abort();
+          })
+      )
+    );
   }
 
-  private createDb(db: IDBDatabase): void {
-    db.createObjectStore('movies');
+  public putSeries(id: number, series: Series): Observable<never> {
+    return this.db$.pipe(
+      switchMap(
+        (db) =>
+          new Observable<never>((subscriber) => {
+            let transaction = db.transaction('series', 'readwrite');
+            transaction.objectStore('series').put(series, id);
+            transaction.oncomplete = () => {
+              transaction = null;
+              subscriber.complete();
+            };
+            return () => transaction?.abort();
+          })
+      )
+    );
   }
 }
