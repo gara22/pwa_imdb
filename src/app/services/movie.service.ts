@@ -163,44 +163,21 @@ export class MovieService {
   }
 
   searchMulti(searchTerm: string): Observable<Array<Movie | Actor | Series>> {
-    return this.http
-      .get(
-        `https://api.themoviedb.org/3/search/multi?api_key=${this.key}&query=${searchTerm}`
-      )
+    return this.movieStoreService
+      .getSearchResult(searchTerm)
       .pipe(
-        map((res) =>
-          res['results'].map((obj) => {
-            if (obj['media_type'] === 'person') {
-              return serializeActor(
-                obj['biography'],
-                obj['birthday'],
-                obj['deathday'],
-                obj['id'],
-                obj['known_for_department'],
-                obj['name'],
-                obj['place_of_birth'],
-                obj['profile_path'],
-                obj['media_type']
-              );
-            } else if (obj['media_type'] === 'movie')
-              return serializeMovie(
-                obj['id'],
-                obj['overview'],
-                obj['poster_path'],
-                obj['title'],
-                obj['media_type']
-              );
-            else if (obj['media_type'] === 'tv')
-              return serializeSeries(
-                obj['first_air_date'],
-                obj['id'],
-                obj['last_air_date'],
-                obj['name'],
-                obj['overview'],
-                obj['poster_path'],
-                obj['media_type']
-              );
-          })
+        switchMap((cachedResults) =>
+          !cachedResults && navigator.onLine
+            ? this.movieOnlineService
+                .searchMulti(searchTerm)
+                .pipe(
+                  delayWhen((results) =>
+                    this.movieStoreService
+                      .putSearch(searchTerm, results)
+                      .pipe(defaultIfEmpty(undefined))
+                  )
+                )
+            : of(cachedResults)
         )
       );
   }

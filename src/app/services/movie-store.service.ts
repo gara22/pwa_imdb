@@ -165,4 +165,42 @@ export class MovieStoreService {
       )
     );
   }
+
+  getSearchResult(term: string): Observable<Array<Movie | Actor | Series>> {
+    return this.db$.pipe(
+      switchMap(
+        (db) =>
+          new Observable<Array<Movie | Actor | Series>>((subscriber) => {
+            let transaction = db.transaction('search');
+            const request = transaction.objectStore('search').get(term);
+            transaction.oncomplete = () => {
+              transaction = null;
+              subscriber.next(request.result);
+              subscriber.complete();
+            };
+            return () => transaction?.abort();
+          })
+      )
+    );
+  }
+
+  public putSearch(
+    term: string,
+    results: Array<Movie | Actor | Series>
+  ): Observable<never> {
+    return this.db$.pipe(
+      switchMap(
+        (db) =>
+          new Observable<never>((subscriber) => {
+            let transaction = db.transaction('search', 'readwrite');
+            transaction.objectStore('search').put(results, term);
+            transaction.oncomplete = () => {
+              transaction = null;
+              subscriber.complete();
+            };
+            return () => transaction?.abort();
+          })
+      )
+    );
+  }
 }

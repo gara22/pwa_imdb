@@ -33,5 +33,6 @@ export class CacheService {
     db.createObjectStore('movie');
     db.createObjectStore('actor');
     db.createObjectStore('series');
+    db.createObjectStore('search');
   }
 }
